@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usepackage{amsmath}
+
+\begin{document}
+\section*{Adding cold water after 1min}
+\[
+\boxed{T(t) = S + (T_0 - S)\, \mathrm{e}^{-kt}}
+\]
+
+\pgfmathsetmacro{\kconst}{0.00056}
+\pgfmathsetmacro{\rsqr}{0.992}
+\pgfmathsetmacro{\ini}{62.90  }
+\pgfmathsetmacro{\portion}{0.25}
+\pgfmathsetmacro{\ncold}{24}
+\pgfmathsetmacro{\intersection}{24 + (\ini  - 24) * exp(-\kconst * 60)}
+\pgfmathsetmacro{\yval}{(150*80 + 50*\ncold)/200} % 先算出 y 值
+\begin{itemize}
+%\item Room temperature $S = 24\,^\circ\text{C}$  
+%\item initial hot water temperature $T\text{h} = 80^\circ\text{C}$
+%\item constant $k = \kconst$  
+\item Theoretical temperature $T_\text{0} =\ini$
+
+
+\end{itemize}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    xlabel={$time$(s)},
+    ylabel={$Temperature$(°c)},
+    xmin=0, xmax=700,
+    ymin=45, ymax=85,
+    samples=200,
+    axis lines=left,
+    grid=major
+]
+
+\addplot [mark=*, color=red] coordinates {
+(0, 80)
+(30, 78.33)
+(60, 75.17)
+(90, 61.7)
+(120, 60.33)
+(150, 59.53)
+(180, 59.17)
+(210, 58.27)
+(240, 57.93)
+(270, 57.13)
+(300, 56.73)
+(330, 56.33)
+(360, 56)
+(390, 55.5)
+(420, 55.13)
+(450, 54.6)
+(480, 53.9)
+(510, 53.47)
+(540, 52.8)
+(570, 52.13)
+(600, 51.7)
+};
+\addlegendentry{temp}
+
+\addplot[
+    domain=0:600,
+    blue,
+    very thick
+]{24 + (\ini  - 24) * exp(-\kconst * x)};
+
+\node at (axis cs:350,82) [anchor=west, fill=white, draw=black, inner sep=6pt] 
+{$k=\kconst$};
+
+\node[draw, circle, fill=red, inner sep=1pt, label={above right:{$(60, \pgfmathprintnumber{\intersection})$}}] 
+    at (60,\intersection) {};
+
+\addplot[only marks, mark=*, mark size=2pt, green] coordinates {(60, 56.98)};
+\addplot[only marks, mark=*, mark size=3pt, blue] coordinates {(0, \ini)};
+\addplot[only marks, mark=*, mark size=2pt, black] coordinates {(60, \intersection)};
+\end{axis}
+\end{tikzpicture}
+\[
+T(t) = 24 + [Z- 24] \, \mathrm{e}^{-\kconst t}, \quad R^2 = \rsqr
+\]
+
+\end{document}

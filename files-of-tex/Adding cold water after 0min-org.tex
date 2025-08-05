@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usepackage{amsmath}
+
+\begin{document}
+\section*{Adding cold water after 0min}
+\[
+\boxed{T(t) = S + (T_0 - S)\, \mathrm{e}^{-kt}}
+\]
+
+\pgfmathsetmacro{\kconst}{0.00073}
+\pgfmathsetmacro{\rsqr}{0.73}
+\pgfmathsetmacro{\ini}{64.22}
+\pgfmathsetmacro{\portion}{0.25}
+\pgfmathsetmacro{\ncold}{24}
+\pgfmathsetmacro{\yval}{(150*80 + 50*\ncold)/200} % 先算出 y 值
+\begin{itemize}
+
+\item Theoretical temperature $T_\text{0} =\ini$
+
+
+\end{itemize}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    xlabel={$time$(s)},
+    ylabel={$Temperature$(°c)},
+    xmin=0, xmax=700,
+    ymin=45, ymax=85,
+    samples=200,
+    axis lines=left,
+    grid=major
+]
+
+\addplot [mark=*, color=red] coordinates {
+(0, 80)
+(30, 61.33)
+(60, 60.33)
+(90, 59.5)
+(120, 58.83)
+(150, 58.33)
+(180, 57.83)
+(210, 57.17)
+(240, 56.67)
+(270, 56.17)
+(300, 55.83)
+(330, 55.07)
+(360, 54.8)
+(390, 54)
+(420, 53.73)
+(450, 53.03)
+(480, 52.83)
+(510, 52.13)
+(540, 51.7)
+(570, 51.5)
+(600, 50.83)
+};
+\addlegendentry{temp}
+
+\addplot[
+    domain=0:600,
+    blue,
+    very thick
+]{24 + (\ini  - 24) * exp(-\kconst * x)};
+
+\node at (axis cs:350,82) [anchor=west, fill=white, draw=black, inner sep=6pt] 
+{$k=\kconst$};
+
+\addplot[only marks, mark=*, mark size=3pt, green] coordinates {(0, \yval)};
+\addplot[only marks, mark=*, mark size=3pt, blue] coordinates {(0, \ini)};
+\end{axis}
+\end{tikzpicture}
+\[
+T(t) = 24 + [(1-\portion)\ini + \portion*\ncold- 24] \, \mathrm{e}^{-\kconst t}, \quad R^2 = \rsqr
+\]
+\end{document}

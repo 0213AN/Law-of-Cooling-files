@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section*{Without adding cold water}
+
+\[
+\boxed{T(t) = S + (T_0 - S)\, \mathrm{e}^{-kt}}
+\]
+\newcommand{\kconst}{0.0008}
+\newcommand{\rsqr}{0.99}
+\newcommand{\ini}{80}
+
+\begin{itemize}
+    \item Room Temperature $S = 24^\circ$C
+    \item Initial Water Temperature $T_i = 80^\circ$C
+   
+    \item constant $k = \kconst $
+    \item Water Volume     $ v= 220 ml$
+\end{itemize}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    xlabel={$time$(s)},
+    ylabel={$Temperature$(°c)},
+    xmin=0, xmax=1000,
+    ymin=45, ymax=85,
+    samples=200,
+    axis lines=left,
+    grid=major
+]
+
+\addplot [mark=*, color=red] coordinates {
+(0,80.00)
+(30,78.33)
+(60,76.67)
+(90,74.50)
+(120,73.00)
+(150,72.33)
+(180,71.33)
+(210,70.00)
+(240,68.83)
+(270,67.67)
+(300,67.67)
+(330,66.33)
+(360,65.33)
+(390,64.33)
+(420,63.00)
+(450,62.67)
+(480,62.33)
+(510,61.33)
+(540,60.83)
+(570,60.00)
+(600,59.33)
+(630,58.67)
+(660,58.33)
+(690,57.17)
+(720,56.50)
+(750,56.33)
+(780,55.83)
+(810,55.33)
+(840,54.67)
+(870,54.17)
+(900,53.17)
+};
+\addlegendentry{temp}
+
+\addplot[
+    domain=0:900,
+    blue,
+    very thick
+]{24 + (\ini - 24) * exp(-\kconst * x)};
+
+
+
+
+\vspace{1cm}
+\vspace{1cm}
+
+\node at (axis cs:450,82) [anchor=west, fill=white, draw=black, inner sep=6pt] 
+{$k=\kconst$};
+
+
+
+
+
+\end{axis}
+
+\end{tikzpicture}
+\[
+T(t) = 24 + (\ini - 24)\, \mathrm{e}^{-\kconst t}, \quad R^2 = \rsqr
+\]
+
+
+
+
+\end{document}

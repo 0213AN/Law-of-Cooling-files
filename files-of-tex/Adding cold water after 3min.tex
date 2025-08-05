@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usepackage{amsmath}
+
+\begin{document}
+\section*{Adding cold water after 3min}
+\[
+\boxed{T(t) = S + (T_0 - S)\, \mathrm{e}^{-kt}}
+\]
+
+\pgfmathsetmacro{\sec}{180}
+\pgfmathsetmacro{\kconst}{0.00049}
+\pgfmathsetmacro{\rsqr}{0.985}
+\pgfmathsetmacro{\ini}{60.36}
+\pgfmathsetmacro{\portion}{0.25}
+\pgfmathsetmacro{\ncold}{24}
+\pgfmathsetmacro{\intersection}{24 + (\ini  - 24) * exp(-\kconst * \sec)}
+\pgfmathsetmacro{\yval}{(150*80 + 50*\ncold)/200} % 先算出 y 值
+\begin{itemize}
+%\item Room temperature $S = 24\,^\circ\text{C}$  
+%\item initial hot water temperature $T\text{h} = 80^\circ\text{C}$
+%\item constant $k = \kconst$  
+\item Theoretical temperature $T_\text{0} =\ini$
+
+
+\end{itemize}
+
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    xlabel={$time$(s)},
+    ylabel={$Temperature$(°c)},
+    xmin=0, xmax=700,
+    ymin=45, ymax=85,
+    samples=200,
+    axis lines=left,
+    grid=major
+]
+
+\addplot [mark=*, color=red] coordinates {
+(0, 80)
+(30, 78.33)
+(60, 76.4)
+(90, 74.77)
+(120, 73.47)
+(150, 72.1)
+(180, 70.67)
+(210, 57.5)
+(240, 56.33)
+(270, 55.73)
+(300, 55.17)
+(330, 54.7)
+(360, 54.27)
+(390, 54)
+(420, 53.43)
+(450, 53.07)
+(480, 52.8)
+(510, 52.5)
+(540, 52.1)
+(570, 51.57)
+(600, 51.13)
+};
+\addlegendentry{temp}
+
+\addplot[
+    domain=0:600,
+    blue,
+    very thick
+]{24 + (\ini  - 24) * exp(-\kconst * x)};
+
+\node at (axis cs:350,82) [anchor=west, fill=white, draw=black, inner sep=6pt] 
+{$k=\kconst$};
+
+\node[draw, circle, fill=red, inner sep=1pt, label={above right:{$(\sec, \pgfmathprintnumber{\intersection})$}}] 
+    at (\sec,\intersection) {};
+
+\addplot[only marks, mark=*, mark size=2pt, green] coordinates {(\sec, 53.60)};
+\addplot[only marks, mark=*, mark size=3pt, blue] coordinates {(0, \ini)};
+\addplot[only marks, mark=*, mark size=2pt, black] coordinates {(\sec, \intersection)};
+\end{axis}
+\end{tikzpicture}
+\[
+T(t) = 24 + [Z- 24] \, \mathrm{e}^{-\kconst t}, \quad R^2 = \rsqr
+\]
+
+\end{document}
